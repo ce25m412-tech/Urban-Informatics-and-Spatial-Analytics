@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hyderabad Night-time Lights 2014–2024</title>
+<style>
+:root{
+  --bg:#060914;--bg2:#0b1020;--card:rgba(255,255,255,.045);--line:rgba(255,255,255,.09);
+  --ink:#eef1f8;--muted:#9aa5bd;--a1:#fcfdbf;--a2:#feb078;--a3:#f1605d;--a4:#b63679;--a5:#721f81;
+  --blue:#67a9cf;--red:#ef8a62;--glow:0 0 40px rgba(182,54,121,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-2;
+  background:radial-gradient(900px 500px at 85% -5%,rgba(114,31,129,.35),transparent 60%),
+             radial-gradient(800px 600px at -10% 40%,rgba(241,96,93,.12),transparent 60%),
+             radial-gradient(700px 500px at 100% 90%,rgba(182,54,121,.18),transparent 60%),var(--bg)}
+canvas#stars{position:fixed;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none}
+a{color:var(--a2)} a:hover{color:var(--a1)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(6,9,20,.7);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;align-items:center;overflow-x:auto;padding:10px 20px;white-space:nowrap}
+nav b{margin-right:auto;font-weight:700;letter-spacing:.04em;background:linear-gradient(90deg,var(--a2),var(--a4));-webkit-background-clip:text;background-clip:text;color:transparent}
+nav a{color:var(--muted);text-decoration:none;font-size:.88rem;padding:6px 11px;border-radius:999px}
+nav a:hover{background:var(--card);color:var(--ink)}
+.hero{position:relative;min-height:560px;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero .bg{position:absolute;inset:-30px;background:url(frames/ntl_2024.png) center/cover no-repeat;filter:blur(18px) saturate(1.3) brightness(.7);opacity:.55;transform:scale(1.1)}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,9,20,.35),var(--bg) 96%)}
+.hero .wrap{width:100%;position:relative;z-index:2;padding-top:70px;padding-bottom:70px}
+.pill{display:inline-flex;gap:8px;align-items:center;padding:6px 14px;border-radius:999px;background:rgba(254,176,120,.12);border:1px solid rgba(254,176,120,.35);color:var(--a2);font-size:.85rem;font-weight:600;letter-spacing:.03em}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--a2);box-shadow:0 0 10px var(--a2)}
+h1{font-size:clamp(2.2rem,6vw,4.2rem);line-height:1.05;margin:18px 0 14px;letter-spacing:-.02em}
+h1 span{background:linear-gradient(90deg,var(--a1),var(--a2) 35%,var(--a3) 65%,var(--a4));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 22px rgba(241,96,93,.35))}
+.lead{max-width:680px;color:#c6cee0;font-size:1.1rem}
+.meta{color:var(--muted);font-size:.92rem;margin-top:18px}
+section{padding:54px 0 8px}
+h2{font-size:clamp(1.5rem,3vw,2.1rem);margin:0 0 6px;letter-spacing:-.01em}
+h2 em{font-style:normal;color:var(--a2);font-size:.9rem;display:block;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+.sub{color:var(--muted);margin:0 0 24px;max-width:760px}
+.glass{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;backdrop-filter:blur(6px)}
+.grid{display:grid;gap:14px}
+.g-kpi{grid-template-columns:repeat(auto-fit,minmax(165px,1fr))}
+.g-2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.kpi{position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,var(--c,var(--a4)),transparent 70%);opacity:.35}
+.kpi strong{display:block;font-size:1.7rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:.88rem}
+.kpi .ico{font-size:1.4rem;margin-bottom:6px;display:block}
+ul.steps{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+ul.steps li{display:flex;gap:14px;align-items:flex-start}
+ul.steps .n{flex:0 0 34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:linear-gradient(135deg,var(--a4),var(--a3));box-shadow:var(--glow)}
+code{background:rgba(255,255,255,.08);padding:1px 6px;border-radius:6px;font-size:.88em}
+.viewer{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:18px}
+@media(max-width:820px){.viewer{grid-template-columns:1fr}}
+.frame{position:relative;border-radius:14px;overflow:hidden;background:#000;border:1px solid var(--line)}
+.frame img{display:block;width:100%;height:auto}
+.badge{position:absolute;left:14px;top:12px;font-size:2.4rem;font-weight:800;letter-spacing:.02em;text-shadow:0 2px 14px #000;font-variant-numeric:tabular-nums}
+.controls{display:flex;gap:12px;align-items:center;margin-top:14px}
+.btn{border:0;cursor:pointer;color:#fff;font-weight:700;padding:10px 18px;border-radius:999px;background:linear-gradient(135deg,var(--a4),var(--a3));box-shadow:var(--glow)}
+.btn:hover{filter:brightness(1.12)}
+input[type=range]{flex:1;accent-color:var(--a3);height:6px}
+.legend{margin-top:12px}
+.ramp{height:12px;border-radius:8px}
+.ticks{display:flex;justify-content:space-between;color:var(--muted);font-size:.8rem;margin-top:4px}
+.bars{display:flex;align-items:flex-end;gap:5px;height:130px;margin:10px 0 4px}
+.bars div{flex:1;border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--a3),var(--a5));opacity:.5;cursor:pointer;transition:.2s;position:relative}
+.bars div.on{opacity:1;background:linear-gradient(180deg,var(--a1),var(--a3));box-shadow:0 0 18px rgba(254,176,120,.5)}
+.bars div:hover{opacity:.9}
+.barlabels{display:flex;gap:5px;color:var(--muted);font-size:.7rem}.barlabels span{flex:1;text-align:center}
+.big{font-size:2.6rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.delta{font-weight:700}.up{color:var(--red)}.down{color:var(--blue)}
+.swipe{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#000;touch-action:none;user-select:none;cursor:ew-resize}
+.swipe img{display:block;width:100%;height:auto;pointer-events:none}
+.swipe .top{position:absolute;inset:0;clip-path:inset(0 0 0 50%)}
+.swipe .top img{height:100%;object-fit:cover}
+.swipe .h{position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;box-shadow:0 0 14px #fff}
+.swipe .h::after{content:"⇆";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;font-weight:800;box-shadow:0 4px 18px #000a}
+.swipe .tag{position:absolute;top:12px;padding:4px 12px;border-radius:999px;background:rgba(0,0,0,.65);font-weight:700}
+.chartbox svg{width:100%;height:auto;display:block;overflow:visible}
+.chartbox text{fill:var(--muted);font-size:12px}
+.tip{position:absolute;pointer-events:none;background:rgba(10,14,28,.95);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:.85rem;opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+.chartbox{position:relative}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tabs button{background:transparent;border:1px solid var(--line);color:var(--muted);padding:5px 14px;border-radius:999px;cursor:pointer}
+.tabs button.on{background:rgba(254,176,120,.15);color:var(--a2);border-color:rgba(254,176,120,.4)}
+.legend-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.quad{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quad .q{border-radius:14px;padding:14px;border:1px solid var(--line);text-align:center}
+.quad .q b{display:block;font-size:1.5rem}
+.quad .q small{color:var(--muted)}
+figure{margin:0}
+figure img{width:100%;height:auto;border-radius:12px;display:block;border:1px solid var(--line);background:#000}
+figcaption{color:var(--muted);font-size:.88rem;padding-top:8px}
+.tablewrap{overflow-x:auto;border-radius:12px;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th{background:rgba(255,255,255,.07);color:var(--a2);font-weight:600;position:sticky;top:0}
+td:first-child,th:first-child{text-align:left}
+td,th{padding:8px 12px;text-align:right;border-bottom:1px solid var(--line)}
+tr:hover td{background:rgba(255,255,255,.04)}
+iframe{width:100%;height:600px;border:1px solid var(--line);border-radius:14px;background:#111}
+.prose p{color:#d5dbea;margin:.2em 0 1em}
+.prose b{color:#fff}
+.note{border-left:4px solid var(--a2);background:rgba(254,176,120,.08);padding:12px 16px;border-radius:0 12px 12px 0}
+footer{color:var(--muted);text-align:center;padding:50px 20px 60px;font-size:.88rem}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}.reveal.in{opacity:1;transform:none}
+</style></head>
+<body>
+<canvas id="stars"></canvas>
+<nav><div class="wrap"><b>HYD · NTL</b>
+<a href="#method">Method</a><a href="#results">Results</a><a href="#timeline">Time slider</a><a href="#trend">Trend</a><a href="#spatial">Where</a><a href="#maps">Maps</a><a href="#discussion">Discussion</a></div></nav>
+
+<header class="hero"><div class="bg"></div><div class="wrap">
+  <span class="pill"><i></i>Question 2 · Google Earth Engine · Row 34</span>
+  <h1>Hyderabad<br><span>after dark, 2014–2024</span></h1>
+  <p class="lead">Eleven years of VIIRS satellite night-time radiance over the Greater Hyderabad Municipal Corporation: has the city got brighter, and where?</p>
+  <p class="meta">HS524M – Urban Informatics and Spatial Analytics · Vara Lalith Kumar · CE25M412</p>
+</div></header>
+
+<main class="wrap">
+
+<section id="method" class="reveal"><h2><em>01 · Question &amp; method</em>How was it measured?</h2>
+<p class="sub">Question: how has annual mean night-time radiance changed across Hyderabad between 2014 and 2024, and where has it changed most?</p>
+<div class="glass"><ul class="steps">
+ <li><span class="n">1</span><div><b>Data.</b> <code>NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG</code> (<code>avg_rad</code>, <code>cf_cvg</code>), ~464 m, monthly, via Google Earth Engine.</div></li>
+ <li><span class="n">2</span><div><b>Boundary.</b> DataMeet Municipal Spatial Data - GHMC area (OpenStreetMap-derived GeoJSON) (feature timestamp 2018-01-03T13:15:26Z; ≈ 611 km²). One fixed boundary is used for every year.</div></li>
+ <li><span class="n">3</span><div><b>Annual surface.</b> Mean of monthly <code>avg_rad</code> where <code>cf_cvg</code> &gt; 0, negatives set to 0, at least 6 valid months per pixel; identical rule every year.</div></li>
+ <li><span class="n">4</span><div><b>Consistency.</b> One fixed colour scale (0–100 nW·cm⁻²·sr⁻¹) for every year and every map.</div></li>
+ <li><span class="n">5</span><div><b>Statistics.</b> City mean / median / sum, OLS, Sen's slope, Mann–Kendall test, per-pixel trend, and a ±2 threshold for brightening / dimming area.</div></li>
+</ul></div></section>
+
+<section id="results" class="reveal"><h2><em>02 · Headline numbers</em>Key results</h2><p class="sub"></p>
+<div class="grid g-kpi" id="kpis"></div></section>
+
+<section id="timeline" class="reveal"><h2><em>03 · Dynamic output</em>Annual radiance time slider</h2>
+<p class="sub">Drag the slider or press play. Every frame uses the same colour scale; the GHMC boundary is drawn in white.</p>
+<div class="glass"><div class="viewer">
+  <div>
+    <div class="frame"><img id="frameImg" src="frames/ntl_2024.png" alt="Annual night-time radiance"><div class="badge" id="badge">2024</div></div>
+    <div class="controls"><button class="btn" id="play">▶ Play</button><input type="range" id="slider" min="0" max="10" value="10"></div>
+    <div class="legend"><div class="ramp" style="background:linear-gradient(90deg,#000004,#2c115f,#721f81,#b63679,#f1605d,#feb078,#fcfdbf)"></div>
+    <div class="ticks"><span>0</span><span>100 nW·cm⁻²·sr⁻¹</span></div></div>
+  </div>
+  <div>
+    <div class="muted" style="color:var(--muted)">City-mean radiance in <b id="yLbl" style="color:#fff">2024</b></div>
+    <div class="big" id="yVal">–</div>
+    <div id="yDelta" class="delta"></div>
+    <div class="bars" id="miniBars"></div><div class="barlabels" id="miniLabels"></div>
+    <p style="color:var(--muted);font-size:.85rem;margin-top:14px">Bars show the city mean for each year; click one to jump to that frame. The animated GIF version is below.</p>
+  </div>
+</div></div>
+<div class="grid g-2" style="margin-top:14px">
+  <figure class="glass"><img src="annual_ntl_2014_2024.gif" alt="Animated GIF"><figcaption>Animated GIF, one frame per year.</figcaption></figure>
+  <div class="glass"><b>Before / after swipe</b> <span style="color:var(--muted)">(2014 ↔ 2024)</span>
+    <div class="swipe" id="swipe" style="margin-top:10px"><img src="frames/ntl_2014.png" alt="2014">
+      <div class="top"><img src="frames/ntl_2024.png" alt="2024"></div><div class="h"></div>
+      <span class="tag" style="left:12px">2014</span><span class="tag" style="right:12px">2024</span></div>
+    <p style="color:var(--muted);font-size:.85rem;margin:8px 0 0">Drag left–right to compare the two end years.</p></div>
+</div></section>
+
+<section id="trend" class="reveal"><h2><em>04 · Numerical result</em>Is there a long-term trend?</h2>
+<p class="sub">City mean and median radiance by year with the OLS and Sen's-slope trend lines. Hover for values; click a point to jump the slider to that year.</p>
+<div class="glass chartbox" id="lineBox"><div class="tabs" id="lineTabs"><button class="on" data-k="mean">Mean</button><button data-k="median">Median</button></div>
+<div id="lineChart"></div><div class="tip" id="lineTip"></div>
+<div style="font-size:.85rem;color:var(--muted);margin-top:8px"><span class="legend-dot" style="background:var(--a2)"></span>City value
+ <span class="legend-dot" style="background:#fff;margin-left:14px"></span>OLS trend (-0.15 / yr, p = 0.56) <span class="legend-dot" style="background:var(--blue);margin-left:14px"></span>Sen slope (-0.20 / yr)</div></div>
+<div class="tablewrap" style="margin-top:14px"><table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>year</th>
+      <th>mean_radiance</th>
+      <th>median_radiance</th>
+      <th>sum_radiance</th>
+      <th>valid_months</th>
+      <th>pct_change_vs_2014</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2014</td>
+      <td>37.242</td>
+      <td>35.537</td>
+      <td>111059.489</td>
+      <td>12</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>2015</td>
+      <td>38.478</td>
+      <td>35.496</td>
+      <td>114746.397</td>
+      <td>12</td>
+      <td>3.320</td>
+    </tr>
+    <tr>
+      <td>2016</td>
+      <td>37.642</td>
+      <td>34.537</td>
+      <td>112251.446</td>
+      <td>12</td>
+      <td>1.073</td>
+    </tr>
+    <tr>
+      <td>2017</td>
+      <td>35.543</td>
+      <td>32.508</td>
+      <td>105994.011</td>
+      <td>12</td>
+      <td>-4.561</td>
+    </tr>
+    <tr>
+      <td>2018</td>
+      <td>33.759</td>
+      <td>29.502</td>
+      <td>100671.560</td>
+      <td>12</td>
+      <td>-9.353</td>
+    </tr>
+    <tr>
+      <td>2019</td>
+      <td>33.562</td>
+      <td>30.235</td>
+      <td>100083.922</td>
+      <td>12</td>
+      <td>-9.883</td>
+    </tr>
+    <tr>
+      <td>2020</td>
+      <td>30.901</td>
+      <td>28.273</td>
+      <td>92151.303</td>
+      <td>12</td>
+      <td>-17.025</td>
+    </tr>
+    <tr>
+      <td>2021</td>
+      <td>32.788</td>
+      <td>30.255</td>
+      <td>97775.672</td>
+      <td>12</td>
+      <td>-11.961</td>
+    </tr>
+    <tr>
+      <td>2022</td>
+      <td>35.873</td>
+      <td>33.733</td>
+      <td>106976.181</td>
+      <td>12</td>
+      <td>-3.677</td>
+    </tr>
+    <tr>
+      <td>2023</td>
+      <td>38.196</td>
+      <td>35.481</td>
+      <td>113903.917</td>
+      <td>12</td>
+      <td>2.561</td>
+    </tr>
+    <tr>
+      <td>2024</td>
+      <td>36.972</td>
+      <td>34.470</td>
+      <td>110255.082</td>
+      <td>12</td>
+      <td>-0.724</td>
+    </tr>
+  </tbody>
+</table></div>
+<p class="sub" style="margin-top:8px;font-size:.85rem">Radiance in nW·cm⁻²·sr⁻¹. <code>sum_radiance</code> is the pixel-value sum inside the boundary (not area-weighted) and is only meaningful for comparing years.</p>
+</section>
+
+<section id="spatial" class="reveal"><h2><em>05 · Where did it change?</em>Brightening vs dimming</h2>
+<p class="sub">Change = 2024 minus 2014, with a ±2 nW·cm⁻²·sr⁻¹ threshold. Rings are distances from the brightest pixel of the 11-year mean surface.</p>
+<div class="grid g-2">
+  <div class="glass"><b>Area share by change class</b><div id="donut" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:10px"></div></div>
+  <div class="glass"><b>Compass quadrants (change in mean radiance)</b><div class="quad" id="quad" style="margin-top:12px"></div></div>
+</div>
+<div class="glass" style="margin-top:14px"><b>Mean radiance by distance from the bright core</b>
+  <div class="chartbox"><div id="ringChart"></div></div>
+  <div style="font-size:.85rem;color:var(--muted)"><span class="legend-dot" style="background:var(--a5)"></span>2014 <span class="legend-dot" style="background:var(--a2);margin-left:14px"></span>2024</div></div>
+<div class="tablewrap" style="margin-top:14px"><table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>class</th>
+      <th>area_km2</th>
+      <th>share_%</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Brightening (&gt; +2)</td>
+      <td>263.267</td>
+      <td>43.247</td>
+    </tr>
+    <tr>
+      <td>Stable (±2)</td>
+      <td>72.411</td>
+      <td>11.895</td>
+    </tr>
+    <tr>
+      <td>Dimming (&lt; -2)</td>
+      <td>273.071</td>
+      <td>44.858</td>
+    </tr>
+  </tbody>
+</table></div>
+<div class="tablewrap" style="margin-top:14px"><table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>zone</th>
+      <th>mean_2014</th>
+      <th>mean_2024</th>
+      <th>change</th>
+      <th>pct_change</th>
+      <th>share_brightening_%</th>
+      <th>share_dimming_%</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0–5 km</td>
+      <td>71.625</td>
+      <td>55.680</td>
+      <td>-15.945</td>
+      <td>-22.262</td>
+      <td>5.430</td>
+      <td>88.254</td>
+    </tr>
+    <tr>
+      <td>5–10 km</td>
+      <td>43.475</td>
+      <td>37.912</td>
+      <td>-5.563</td>
+      <td>-12.796</td>
+      <td>24.227</td>
+      <td>61.168</td>
+    </tr>
+    <tr>
+      <td>10–15 km</td>
+      <td>31.479</td>
+      <td>32.468</td>
+      <td>0.989</td>
+      <td>3.140</td>
+      <td>44.904</td>
+      <td>40.868</td>
+    </tr>
+    <tr>
+      <td>15–20 km</td>
+      <td>31.420</td>
+      <td>35.233</td>
+      <td>3.812</td>
+      <td>12.134</td>
+      <td>52.128</td>
+      <td>35.496</td>
+    </tr>
+    <tr>
+      <td>20+ km</td>
+      <td>17.454</td>
+      <td>30.173</td>
+      <td>12.719</td>
+      <td>72.871</td>
+      <td>87.507</td>
+      <td>5.708</td>
+    </tr>
+  </tbody>
+</table></div>
+</section>
+
+<section id="maps" class="reveal"><h2><em>06 · Maps</em>Change and trend surfaces</h2><p class="sub"></p>
+<div class="grid">
+ <figure class="glass"><img src="maps_2014_2024_change.png" alt="2014, 2024 and change"><figcaption>Left &amp; centre: annual mean radiance, same scale. Right: 2024 − 2014 (red = brighter, blue = dimmer).</figcaption></figure>
+ <figure class="glass"><img src="trend_slope_map.png" alt="Per-pixel trend" style="max-width:620px;margin:auto"><figcaption>Per-pixel linear trend of the 11 annual values (nW·cm⁻²·sr⁻¹ per year).</figcaption></figure>
+</div>
+<h3 style="margin:26px 0 8px">Interactive map</h3>
+<iframe src="interactive_map.html" title="Interactive map" loading="lazy"></iframe>
+<p style="color:var(--muted);font-size:.88rem">Layer control switches years, the change layer and basemap. <a href="interactive_map.html">Open full screen</a>.</p>
+</section>
+
+<section id="discussion" class="reveal"><h2><em>07 · Interpretation</em>What does it mean?</h2>
+<div class="glass prose">
+ <p><b>Temporal pattern.</b> City-mean radiance moved from 37.24 nW·cm⁻²·sr⁻¹ in 2014 to 36.97 in 2024 (-0.27, -0.7%). The highest annual mean is in 2015 and the lowest in 2020. The OLS slope is -0.147 per year (R² = 0.04); Sen&#x27;s slope is -0.197 [-0.991, +0.536] and the Mann–Kendall test gives tau = -0.20 (p = 0.4454), so the monotonic trend is not statistically significant at the 5% level. With only 11 annual observations the test has limited power: a non-significant result means no detectable trend, not proof of no change.</p>
+ <p><b>Change surface.</b> Using a ±2 nW·cm⁻²·sr⁻¹ threshold on the 2014→2024 difference, 263.3 km² (43.2%) of the city brightened, 72.4 km² (11.9%) stayed stable and 273.1 km² (44.9%) dimmed. The city mean can hide opposite changes in different parts of the city, so it should be read together with the change and trend maps.</p>
+ <p><b>Spatial pattern.</b> The brightest pixel of the 2014–2024 mean surface (113 nW·cm⁻²·sr⁻¹) lies at about 17.356°N, 78.489°E. Radiance does not fall steadily with distance from this core: in 2024 the ring means are 0–5 km 55.7, 5–10 km 37.9, 10–15 km 32.5, 15–20 km 35.2, 20+ km 30.2. Between 2014 and 2024 the ring that changed most upward is 20+ km (+12.7) and the ring that changed most downward is 0–5 km (-15.9); the largest share of brightening pixels is in the 20+ km ring (88%). By compass quadrant relative to the core, NW changed most upward (+4.6) and NE most downward (-6.7). These figures describe the pattern in the maps; they do not by themselves explain it.</p>
+ <p><b>How to read this.</b> Possible contributors to year-to-year variation include lighting-technology changes (for example LED conversion, to which VIIRS is less sensitive), reduced activity during the 2020 COVID-19 lockdowns, new development, and data issues such as cloud cover and sensor calibration. These are hypotheses, not findings of this analysis.</p>
+</div>
+<h3 style="margin:26px 0 8px">Limitations</h3>
+<div class="glass note prose"><p>VIIRS monthly composites are about 464 m, so small features are blurred and lit and unlit land are mixed in one pixel. Radiance reflects lighting and activity, not population or built-up area directly. Cloud cover reduces valid monthly observations (annual means require at least 6 valid months). Calibration differences, LED conversion and bright-pixel blooming can affect the trend. The boundary is a fixed, community-curated GHMC polygon whose vintage is stated above; the city&#x27;s administrative extent has changed over time and may have been revised since this polygon was last updated, so check the current extent before generalising. The brightening/dimming classes compare only the two end years and depend on the ±2 threshold.</p></div>
+</section>
+
+<section class="reveal"><h2><em>08 · Sources</em>Data &amp; credits</h2>
+<div class="glass prose"><ul>
+ <li>NOAA VIIRS DNB Monthly Cloud-free Composites (VCMSLCFG), via the <a href="https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMSLCFG">Earth Engine Data Catalog</a>.</li>
+ <li>Boundary: DataMeet Municipal Spatial Data - GHMC area (OpenStreetMap-derived GeoJSON).</li>
+ <li>Basemaps: Esri World Imagery and Dark Gray (Esri, Maxar, Earthstar Geographics, DeLorme, NAVTEQ).</li>
+ <li>Gorelick et al. (2017), Google Earth Engine: planetary-scale geospatial analysis for everyone.</li>
+</ul></div></section>
+</main>
+<footer>Code: accompanying Jupyter notebook · Vara Lalith Kumar · CE25M412 · HS524M</footer>
+
+<script>
+const D = {"years": [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024], "mean": [37.24201609231204, 38.47836154437543, 37.64171959239798, 35.54338949199638, 33.75859096768721, 33.561536051828625, 30.901459577130808, 32.78750122297031, 35.87274423613567, 38.195849151588824, 36.97227118149402], "median": [35.53667205104933, 35.49642990554484, 34.53660717785763, 32.50772133580548, 29.502428894366332, 30.234929987357223, 28.272636949710932, 30.255097011633605, 33.73298570222759, 35.48147774792537, 34.47034406596498], "first": 37.24201609231204, "last": 36.97227118149402, "pct": -0.7243026536195056, "peak": 2015, "low": 2020, "thr": 2.0, "mk_p": 0.4453821448613115, "ols": {"slope": -0.14686007384210922, "line": [36.275703924657535, 36.12884385081543, 35.98198377697332, 35.83512370313122, 35.68826362928911, 35.541403555447005, 35.3945434816049, 35.24768340776279, 35.10082333392063, 34.953963260078524, 34.80710318623642]}, "sen": {"slope": -0.1970549158585868, "line": [36.85801881542858, 36.66096389956999, 36.463908983711406, 36.26685406785282, 36.06979915199423, 35.872744236135645, 35.67568932027706, 35.47863440441847, 35.281579488559885, 35.0845245727013, 34.88746965684271]}, "share": {"bright": 43.24718898586654, "stable": 11.895084679289022, "dim": 44.85772633484443}, "area": {"bright": 263.26700204270895, "stable": 72.41125622254894, "dim": 273.0711384382972}, "quads": [{"label": "SW", "first": 45.897491094271864, "last": 39.41033939537269, "change": -6.487151698899176}, {"label": "SE", "first": 37.17282234406121, "last": 34.59802623728917, "change": -2.574796106772041}, {"label": "NW", "first": 34.703108039208075, "last": 39.34471235004592, "change": 4.641604310837842}, {"label": "NE", "first": 38.992780695095924, "last": 32.24658580175647, "change": -6.746194893339457}], "rings": [{"label": "0–5 km", "first": 71.62526768472503, "last": 55.68003036912585, "change": -15.94523731559918}, {"label": "5–10 km", "first": 43.47526013244422, "last": 37.91216989378255, "change": -5.5630902386616725}, {"label": "10–15 km", "first": 31.4793603803293, "last": 32.46793356708318, "change": 0.9885731867538787}, {"label": "15–20 km", "first": 31.420476390420863, "last": 35.2329296251584, "change": 3.8124532347375357}, {"label": "20+ km", "first": 17.454180283316326, "last": 30.173288964712956, "change": 12.71910868139663}]};
+const $ = s => document.querySelector(s);
+const fmt = (v,d=2) => Number(v).toFixed(d);
+
+/* ---------- starfield ---------- */
+(function(){const c=$('#stars'),x=c.getContext('2d');let w,h,P=[];
+ function rs(){w=c.width=innerWidth;h=c.height=innerHeight;P=Array.from({length:Math.min(140,w/9)},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.3+.2,p:Math.random()*6.28,s:Math.random()*.02+.005}))}
+ rs();addEventListener('resize',rs);
+ (function f(){x.clearRect(0,0,w,h);for(const p of P){p.p+=p.s;x.globalAlpha=.25+.5*Math.abs(Math.sin(p.p));x.fillStyle='#fff';x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill()}requestAnimationFrame(f)})();})();
+
+/* ---------- reveal on scroll ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
+
+/* ---------- KPI cards ---------- */
+const kp=[
+ ['💡',`${fmt(D.first)} → ${fmt(D.last)}`,`City-mean radiance ${D.years[0]} → ${D.years.at(-1)}`,'#feb078'],
+ ['📉',`${D.pct>0?'+':''}${fmt(D.pct,1)}%`,`Change in city mean, ${D.years[0]}–${D.years.at(-1)}`,'#67a9cf'],
+ ['📈',`${D.ols.slope>0?'+':''}${fmt(D.ols.slope,3)}`,`OLS slope per year (Mann–Kendall p = ${fmt(D.mk_p,3)})`,'#b63679'],
+ ['🔆',`${fmt(D.share.bright,1)}%`,`Area brightened by more than ${D.thr}`,'#ef8a62'],
+ ['🌑',`${fmt(D.share.dim,1)}%`,`Area dimmed by more than ${D.thr}`,'#2166ac'],
+ ['📅',`${D.peak} / ${D.low}`,'Years of highest / lowest city mean','#f1605d']];
+$('#kpis').innerHTML=kp.map(k=>`<div class="glass kpi" style="--c:${k[3]}"><span class="ico">${k[0]}</span><strong>${k[1]}</strong><span>${k[2]}</span></div>`).join('');
+
+/* ---------- time slider ---------- */
+const sl=$('#slider');sl.max=D.years.length-1;sl.value=sl.max;
+const mini=$('#miniBars'),miniL=$('#miniLabels');
+const maxMean=Math.max(...D.mean);
+mini.innerHTML=D.years.map((y,i)=>`<div data-i="${i}" title="${y}: ${fmt(D.mean[i])}" style="height:${(D.mean[i]/maxMean*100).toFixed(1)}%"></div>`).join('');
+miniL.innerHTML=D.years.map(y=>`<span>${String(y).slice(2)}</span>`).join('');
+D.years.forEach(y=>{const i=new Image();i.src=`frames/ntl_${y}.png`});
+function show(i){i=+i;sl.value=i;const y=D.years[i];
+ $('#frameImg').src=`frames/ntl_${y}.png`;$('#badge').textContent=y;$('#yLbl').textContent=y;
+ $('#yVal').textContent=fmt(D.mean[i]);
+ const dl=D.mean[i]-D.mean[0],pc=dl/D.mean[0]*100;
+ $('#yDelta').innerHTML=i===0?'<span style="color:var(--muted)">baseline year</span>':`<span class="${dl>0?'up':'down'}">${dl>0?'▲':'▼'} ${fmt(Math.abs(dl))} (${pc>0?'+':''}${fmt(pc,1)}%) vs ${D.years[0]}</span>`;
+ mini.querySelectorAll('div').forEach((d,j)=>d.classList.toggle('on',j===i));}
+sl.oninput=()=>show(sl.value);
+mini.onclick=e=>{if(e.target.dataset.i!==undefined){stop();show(e.target.dataset.i)}};
+let timer=null;const pb=$('#play');
+function stop(){clearInterval(timer);timer=null;pb.textContent='▶ Play'}
+pb.onclick=()=>{if(timer){stop();return}pb.textContent='⏸ Pause';
+ if(+sl.value>=sl.max)show(0);
+ timer=setInterval(()=>{let n=+sl.value+1;if(n>sl.max){stop();return}show(n)},900)};
+show(sl.max);
+
+/* ---------- swipe compare ---------- */
+(function(){const s=$('#swipe'),t=s.querySelector('.top'),h=s.querySelector('.h');
+ function set(px){const r=s.getBoundingClientRect();let p=Math.min(1,Math.max(0,(px-r.left)/r.width))*100;
+  t.style.clipPath=`inset(0 0 0 ${p}%)`;h.style.left=p+'%'}
+ let d=false;s.addEventListener('pointerdown',e=>{d=true;s.setPointerCapture(e.pointerId);set(e.clientX)});
+ s.addEventListener('pointermove',e=>{if(d)set(e.clientX)});s.addEventListener('pointerup',()=>d=false);})();
+
+/* ---------- line chart ---------- */
+const NS='http://www.w3.org/2000/svg';
+function lineChart(key){
+ const W=860,H=380,m={l:56,r:20,t:20,b:44},iw=W-m.l-m.r,ih=H-m.t-m.b;
+ const ys=D.years,vals=D[key];
+ const lo=Math.min(...vals,...D.ols.line)*.94,hi=Math.max(...vals,...D.ols.line)*1.04;
+ const X=i=>m.l+i/(ys.length-1)*iw,Y=v=>m.t+(1-(v-lo)/(hi-lo))*ih;
+ let g='';
+ for(let k=0;k<=5;k++){const v=lo+(hi-lo)*k/5,y=Y(v);g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.08)"/><text x="${m.l-8}" y="${y+4}" text-anchor="end">${v.toFixed(1)}</text>`}
+ ys.forEach((y,i)=>g+=`<text x="${X(i)}" y="${H-m.b+22}" text-anchor="middle">${y}</text>`);
+ g+=`<text transform="translate(14 ${m.t+ih/2}) rotate(-90)" text-anchor="middle">Radiance (nW·cm⁻²·sr⁻¹)</text>`;
+ const pts=vals.map((v,i)=>[X(i),Y(v)]);
+ const path=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+ const area=path+` L${X(ys.length-1)} ${m.t+ih} L${X(0)} ${m.t+ih} Z`;
+ const ol=D.ols.line.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' ');
+ const sn=D.sen.line.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' ');
+ g=`<defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1605d" stop-opacity=".45"/><stop offset="1" stop-color="#721f81" stop-opacity="0"/></linearGradient></defs>`+g
+  +`<path d="${area}" fill="url(#ga)"/>`
+  +`<path d="${sn}" fill="none" stroke="#67a9cf" stroke-width="2" stroke-dasharray="3 5"/>`
+  +`<path d="${ol}" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="7 5" opacity=".8"/>`
+  +`<path id="mainLine" d="${path}" fill="none" stroke="#feb078" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>`
+  +pts.map((p,i)=>`<circle class="pt" data-i="${i}" cx="${p[0]}" cy="${p[1]}" r="5.5" fill="#0b1020" stroke="#feb078" stroke-width="2.5" style="cursor:pointer"/>`).join('');
+ const el=$('#lineChart');el.innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}</svg>`;
+ const pth=el.querySelector('#mainLine'),L=pth.getTotalLength();
+ pth.style.strokeDasharray=L;pth.style.strokeDashoffset=L;pth.getBoundingClientRect();
+ pth.style.transition='stroke-dashoffset 1.6s ease';pth.style.strokeDashoffset=0;
+ const tip=$('#lineTip'),box=$('#lineBox');
+ el.querySelectorAll('.pt').forEach(c=>{
+  c.onmousemove=e=>{const i=+c.dataset.i,b=box.getBoundingClientRect();
+   tip.innerHTML=`<b>${ys[i]}</b><br>${key}: ${fmt(vals[i])}<br>vs ${ys[0]}: ${fmt((vals[i]/vals[0]-1)*100,1)}%`;
+   tip.style.left=(e.clientX-b.left+14)+'px';tip.style.top=(e.clientY-b.top-50)+'px';tip.style.opacity=1};
+  c.onmouseleave=()=>tip.style.opacity=0;
+  c.onclick=()=>{stop();show(c.dataset.i);document.getElementById('timeline').scrollIntoView({behavior:'smooth'})};});}
+lineChart('mean');
+document.querySelectorAll('#lineTabs button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('#lineTabs button').forEach(x=>x.classList.toggle('on',x===b));lineChart(b.dataset.k)});
+
+/* ---------- donut ---------- */
+(function(){const items=[['Brightening',D.share.bright,'#ef8a62',D.area.bright],['Stable',D.share.stable,'#9aa5bd',D.area.stable],['Dimming',D.share.dim,'#2f7fc0',D.area.dim]];
+ const R=70,C=2*Math.PI*R;let off=0,arcs='';
+ items.forEach(it=>{const len=it[1]/100*C;arcs+=`<circle r="${R}" cx="100" cy="100" fill="none" stroke="${it[2]}" stroke-width="30" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 100 100)"/>`;off+=len});
+ $('#donut').innerHTML=`<svg viewBox="0 0 200 200" width="200" height="200">${arcs}<text x="100" y="96" text-anchor="middle" style="fill:#fff;font-size:15px;font-weight:700">${D.years[0]}→${D.years.at(-1)}</text><text x="100" y="114" text-anchor="middle" style="font-size:11px">change in area</text></svg>
+ <div>${items.map(it=>`<div style="margin:6px 0"><span class="legend-dot" style="background:${it[2]}"></span><b>${it[0]}</b> ${fmt(it[1],1)}% <span style="color:var(--muted)">(${fmt(it[3],1)} km²)</span></div>`).join('')}</div>`})();
+
+/* ---------- quadrants ---------- */
+(function(){const order=['NW','NE','SW','SE'];const by=Object.fromEntries(D.quads.map(q=>[q.label,q]));
+ const mx=Math.max(...D.quads.map(q=>Math.abs(q.change)),.001);
+ $('#quad').innerHTML=order.map(k=>{const q=by[k];if(!q)return'';const a=Math.min(.6,Math.abs(q.change)/mx*.6),c=q.change>=0?'239,138,98':'47,127,192';
+  return `<div class="q" style="background:rgba(${c},${a})"><small>${k}</small><b>${q.change>0?'+':''}${fmt(q.change,1)}</b><small>${fmt(q.first,1)} → ${fmt(q.last,1)}</small></div>`}).join('')})();
+
+/* ---------- ring chart ---------- */
+(function(){const W=860,H=300,m={l:60,r:20,t:14,b:40},iw=W-m.l-m.r,ih=H-m.t-m.b;const R=D.rings;
+ const hi=Math.max(...R.flatMap(r=>[r.first,r.last]))*1.1,Y=v=>m.t+(1-v/hi)*ih;const gw=iw/R.length,bw=gw*.3;
+ let g='';for(let k=0;k<=4;k++){const v=hi*k/4,y=Y(v);g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.08)"/><text x="${m.l-8}" y="${y+4}" text-anchor="end">${v.toFixed(0)}</text>`}
+ R.forEach((r,i)=>{const x0=m.l+i*gw+gw/2;
+  g+=`<rect x="${x0-bw-2}" y="${Y(r.first)}" width="${bw}" height="${m.t+ih-Y(r.first)}" rx="4" fill="#721f81"/>`;
+  g+=`<rect x="${x0+2}" y="${Y(r.last)}" width="${bw}" height="${m.t+ih-Y(r.last)}" rx="4" fill="#feb078"/>`;
+  g+=`<text x="${x0}" y="${H-m.b+18}" text-anchor="middle">${r.label}</text>`;
+  g+=`<text x="${x0}" y="${H-m.b+33}" text-anchor="middle" style="fill:${r.change>=0?'#ef8a62':'#67a9cf'}">${r.change>0?'+':''}${fmt(r.change,1)}</text>`});
+ $('#ringChart').innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}</svg>`})();
+</script></body></html>
